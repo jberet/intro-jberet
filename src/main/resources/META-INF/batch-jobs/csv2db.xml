@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright (c) 2017 Red Hat, Inc. and/or its affiliates.
+
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+
+ Contributors:
+ Cheng Fang - Initial API and implementation
+-->
+
+<job id="csv2db" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0">
+    <listeners>
+        <listener ref="jobListener1"/>
+    </listeners>
+
+    <!-- prepare the output table -->
+    <step id="csv2db.step1">
+        <batchlet ref="jdbcBatchlet">
+            <properties>
+                <property name="url"
+value="jdbc:postgresql://#{systemProperties['db.host']}:#{systemProperties['db.port']}?:5432;/#{systemProperties['db.name']}?:jberet;"/>
+                <property name="user" value="#{systemProperties['db.user']}?:jberet;"/>
+                <property name="password" value="#{systemProperties['db.password']}?:jberet;"/>
+
+                <property name="sqls" value="
+CREATE TABLE IF NOT EXISTS MOVIES (
+  rank INTEGER NOT NULL PRIMARY KEY,
+  tit  VARCHAR(128),
+  grs  DOUBLE,
+  opn  DATE);
+
+DELETE FROM MOVIES"/>
+            </properties>
+        </batchlet>
+    </step>
+
+
+    <!-- read data from online CSV resource and output to db, following chunk processing pattern -->
+    <step id="csv2db.step2" parent="csvItemReaderStep" jsl-name="csvItemReader">
+        <chunk>
+            <!-- reader element is inherited from parent step -->
+
+            <!-- processor element is optional and is not used here -->
+
+            <writer ref="jdbcItemWriter">
+                <properties>
+                    <property name="url"
+                              value="jdbc:postgresql://#{systemProperties['db.host']}:#{systemProperties['db.port']}/#{systemProperties['db.name']}?:jberet;"/>
+                    <property name="user" value="#{systemProperties['db.user']}?:jberet;"/>
+                    <property name="password" value="#{systemProperties['db.password']}?:jberet;"/>
+
+                    <property name="sql" value="insert into MOVIES (rank,tit,grs,opn) VALUES (?, ?, ?, ?)"/>
+                    <property name="parameterNames" value="rank,tit,grs,opn"/>
+                    <property name="parameterTypes" value="Int,String,Double,Date"/>
+                    <property name="beanType" value="org.jberet.samples.wildfly.common.Movie"/>
+                </properties>
+            </writer>
+        </chunk>
+    </step>
+</job>
