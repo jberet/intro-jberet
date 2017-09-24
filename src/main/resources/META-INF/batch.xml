@@ -13,7 +13,8 @@
 -->
 
 <batch-artifacts xmlns="http://xmlns.jcp.org/xml/ns/javaee">
-    <ref id="jdbcBatchlet" class="org.jberet.support.io.JdbcBatchlet" />
     <ref id="csvItemReader" class="org.jberet.support.io.CsvItemReader" />
     <ref id="jdbcItemWriter" class="org.jberet.support.io.JdbcItemWriter" />
+    <ref id="jdbcBatchlet" class="org.jberet.support.io.JdbcBatchlet" />
+    <ref id="jobListener1" class="org.jberet.samples.wildfly.introjberet.JobListener1"/>
 </batch-artifacts>
