@@ -27,7 +27,7 @@ public class JobListener1 implements JobListener {
      */
     @Override
     public void beforeJob() throws Exception {
-        System.out.printf("Copying certain environment variables to system properties...");
+        System.out.printf("Copying certain environment variables to system properties...%n");
         copyEnv("POSTGRESQL_SERVICE_HOST", "db.host");
         copyEnv("POSTGRESQL_SERVICE_PORT", "db.port");
         copyEnv("POSTGRESQL_DATABASE", "db.name");

@@ -22,7 +22,7 @@
         <batchlet ref="jdbcBatchlet">
             <properties>
                 <property name="url"
-value="jdbc:postgresql://#{systemProperties['db.host']}:#{systemProperties['db.port']}?:5432;/#{systemProperties['db.name']}?:jberet;"/>
+value="jdbc:postgresql://#{systemProperties['db.host']}/#{systemProperties['db.name']}?:jberet;"/>
                 <property name="user" value="#{systemProperties['db.user']}?:jberet;"/>
                 <property name="password" value="#{systemProperties['db.password']}?:jberet;"/>
 
@@ -56,7 +56,7 @@ DELETE FROM MOVIES"/>
             <writer ref="jdbcItemWriter">
                 <properties>
                     <property name="url"
-value="jdbc:postgresql://#{systemProperties['db.host']}:#{systemProperties['db.port']}?:5432;/#{systemProperties['db.name']}?:jberet;"/>
+value="jdbc:postgresql://#{systemProperties['db.host']}/#{systemProperties['db.name']}?:jberet;"/>
                     <property name="user" value="#{systemProperties['db.user']}?:jberet;"/>
                     <property name="password" value="#{systemProperties['db.password']}?:jberet;"/>
 
