@@ -18,11 +18,11 @@
     </listeners>
 
     <!-- prepare the output table -->
-    <step id="csv2db.step1">
+    <step id="csv2db.step1" next="csv2db.step2">
         <batchlet ref="jdbcBatchlet">
             <properties>
                 <property name="url"
-value="jdbc:postgresql://#{systemProperties['db.host']}/#{systemProperties['db.name']}?:jberet;"/>
+value="jdbc:postgresql://#{systemProperties['db.host']}?:127.0.0.1;/#{systemProperties['db.name']}?:sampledb;"/>
                 <property name="user" value="#{systemProperties['db.user']}?:jberet;"/>
                 <property name="password" value="#{systemProperties['db.password']}?:jberet;"/>
 
@@ -30,7 +30,7 @@ value="jdbc:postgresql://#{systemProperties['db.host']}/#{systemProperties['db.n
 CREATE TABLE IF NOT EXISTS MOVIES (
   rank INTEGER NOT NULL PRIMARY KEY,
   tit  VARCHAR(128),
-  grs  DOUBLE,
+  grs  NUMERIC(12, 3),
   opn  DATE);
 
 DELETE FROM MOVIES"/>
@@ -56,7 +56,7 @@ DELETE FROM MOVIES"/>
             <writer ref="jdbcItemWriter">
                 <properties>
                     <property name="url"
-value="jdbc:postgresql://#{systemProperties['db.host']}/#{systemProperties['db.name']}?:jberet;"/>
+value="jdbc:postgresql://#{systemProperties['db.host']}?:127.0.0.1;/#{systemProperties['db.name']}?:sampledb;"/>
                     <property name="user" value="#{systemProperties['db.user']}?:jberet;"/>
                     <property name="password" value="#{systemProperties['db.password']}?:jberet;"/>
 
