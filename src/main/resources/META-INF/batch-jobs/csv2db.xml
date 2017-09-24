@@ -22,9 +22,9 @@
         <batchlet ref="jdbcBatchlet">
             <properties>
                 <property name="url"
-value="jdbc:postgresql://#{systemProperties['db.host']}?:127.0.0.1;/#{systemProperties['db.name']}?:sampledb;"/>
-                <property name="user" value="#{systemProperties['db.user']}?:jberet;"/>
-                <property name="password" value="#{systemProperties['db.password']}?:jberet;"/>
+value="jdbc:postgresql://#{jobParameters['db.host']}?:127.0.0.1;/#{jobParameters['db.name']}?:sampledb;"/>
+                <property name="user" value="#{jobParameters['db.user']}?:jberet;"/>
+                <property name="password" value="#{jobParameters['db.password']}?:jberet;"/>
 
                 <property name="sqls" value="
 CREATE TABLE IF NOT EXISTS MOVIES (
@@ -56,9 +56,9 @@ DELETE FROM MOVIES"/>
             <writer ref="jdbcItemWriter">
                 <properties>
                     <property name="url"
-value="jdbc:postgresql://#{systemProperties['db.host']}?:127.0.0.1;/#{systemProperties['db.name']}?:sampledb;"/>
-                    <property name="user" value="#{systemProperties['db.user']}?:jberet;"/>
-                    <property name="password" value="#{systemProperties['db.password']}?:jberet;"/>
+                              value="jdbc:postgresql://#{jobParameters['db.host']}?:127.0.0.1;/#{jobParameters['db.name']}?:sampledb;"/>
+                    <property name="user" value="#{jobParameters['db.user']}?:jberet;"/>
+                    <property name="password" value="#{jobParameters['db.password']}?:jberet;"/>
 
                     <property name="sql" value="insert into MOVIES (rank,tit,grs,opn) VALUES (?, ?, ?, ?)"/>
                     <property name="parameterNames" value="rank,tit,grs,opn"/>
