@@ -13,10 +13,6 @@
 -->
 
 <job id="csv2db" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0">
-    <listeners>
-        <listener ref="jobListener1"/>
-    </listeners>
-
     <!-- prepare the output table -->
     <step id="csv2db.step1" next="csv2db.step2">
         <batchlet ref="jdbcBatchlet">
