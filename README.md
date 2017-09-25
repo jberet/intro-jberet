@@ -179,6 +179,172 @@ curl http://localhost:8080/intro-jberet/api/jobexecutions/4/stepexecutions/5
 }
 ```
 
+### To restart a failed job execution:
+
+The following job execution will fail due to connection refused to Postgresql server,
+because `db.host` is not specified as query param:
+
+    curl -X POST -H 'Content-Type:application/json' 'http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobs/csv2db/start'
+    
+To check the status (`FAILED`) of the above job execution:
+
+```json
+curl http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobexecutions/2
+
+{
+   "startTime":1506346579710,
+   "endTime":1506346579755,
+   "batchStatus":"FAILED",
+   "exitStatus":"FAILED",
+   "executionId":2,
+   "href":"http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobexecutions/2",
+   "createTime":1506346579708,
+   "lastUpdatedTime":1506346579755,
+   "jobParameters":null,
+   "jobName":"csv2db",
+   "jobInstanceId":2
+}
+```
+
+To restart the above failed job execution id `2`, with `db.host` query param:
+
+```json
+curl -X POST -H 'Content-Type:application/json' 'http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobexecutions/2/restart?db.host=172.30.245.228'
+
+# wait a bit for the job execution to complete
+
+curl http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobexecutions/3
+
+{
+   "startTime":1506346732383,
+   "endTime":1506346733135,
+   "batchStatus":"COMPLETED",
+   "exitStatus":"COMPLETED",
+   "executionId":3,
+   "href":"http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobexecutions/3",
+   "createTime":1506346732381,
+   "lastUpdatedTime":1506346733135,
+   "jobParameters":{
+      "db.host":"172.30.245.228"
+   },
+   "jobName":"csv2db",
+   "jobInstanceId":2
+}
+```
+Note that the previously failed job execution `2`, and the successful restart job execution `3`
+both belong to the same job instance id `2`.
+
+### To stop a running job execution:
+
+```json
+curl -X POST -H 'Content-Type:application/json' 'http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobexecutions/2/stop'
+
+{
+  "type":"javax.batch.operations.JobExecutionNotRunningException",
+  "message":"JBERET000612: Job execution 2 has batch status FAILED, and is not running.",
+  "stackTrace":"javax.batch.operations.JobExecutionNotRunningException: ..."
+}
+```
+
+You can only stop a running job execution. Because job execution `2` has already 
+completed, therefore the above stop operation failed.
+
+### To abandon a finished job execution:
+
+    curl -X POST -H 'Content-Type:application/json' 'http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobexecutions/2/abandon'
+    
+You can only abandon a finished job execution (not running job executions). Once it is abandoned,
+it may not be restarted.
+
+### To schedule a job execution
+
+```json
+curl -X POST -H 'Content-Type:application/json' -d '{"jobName":"csv2db", "initialDelay":5, "jobParameters":{"db.host":"172.30.245.228"}}' 'http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobs/csv2db/schedule'
+
+{
+   "id":"1",
+   "jobScheduleConfig":{
+      "jobName":"csv2db",
+      "jobExecutionId":0,
+      "jobParameters":{
+         "db.host":"172.30.245.228"
+      },
+      "scheduleExpression":null,
+      "initialDelay":5,
+      "afterDelay":0,
+      "interval":0,
+      "persistent":false
+   },
+   "createTime":1506349717648,
+   "status":"SCHEDULED",
+   "jobExecutionIds":[
+   ]
+}
+```
+The above command schedules to start running job `csv2db` after 5 minutes, 
+with job parameter `db.host = 172.30.245.228`.  More advanced scheduling
+are also supported by JBeret by customizing `jobScheduleConfig` field,
+such as repeated execution, interval between executions, and calendar-based
+cron-like schedules.
+
+To check the status of the schedule:
+
+    curl http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/schedules
+    
+```json
+[
+   {
+      "id":"1",
+      "jobScheduleConfig":{
+         "jobName":"csv2db",
+         "jobExecutionId":0,
+         "jobParameters":{
+            "db.host":"172.30.245.228"
+         },
+         "scheduleExpression":null,
+         "initialDelay":5,
+         "afterDelay":0,
+         "interval":0,
+         "persistent":false
+      },
+      "createTime":1506349717648,
+      "status":"SCHEDULED",
+      "jobExecutionIds":[
+
+      ]
+   }
+]
+
+# after the schedule execution is executed, the status of the schedule changes to `DONE`,
+# and includes the job execution id
+
+[
+   {
+      "id":"1",
+      "jobScheduleConfig":{
+         "jobName":"csv2db",
+         "jobExecutionId":0,
+         "jobParameters":{
+            "db.host":"172.30.245.228"
+         },
+         "scheduleExpression":null,
+         "initialDelay":5,
+         "afterDelay":0,
+         "interval":0,
+         "persistent":false
+      },
+      "createTime":1506349717648,
+      "status":"DONE",
+      "jobExecutionIds":[
+         4
+      ]
+   }
+]
+```
+
+### To cancel a scheduled job execution
+    curl http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/schedules/2/cancel
+
 ### To query Postgresql `MOVIES` table to verify the output:
 
     psql sampledb jberet --host=127.0.0.1 --port=5432
