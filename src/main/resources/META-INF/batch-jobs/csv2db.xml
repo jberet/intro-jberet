@@ -43,7 +43,8 @@ DELETE FROM MOVIES"/>
                     <property name="resource" value="https://raw.githubusercontent.com/jberet/jsr352/master/jberet-support/src/test/resources/movies-2012.csv"/>
                     <property name="beanType" value="java.util.Map"/>
                     <property name="nameMapping" value="rank,tit,grs,opn"/>
-                    <property name="cellProcessors" value= "ParseInt; NotNull, StrMinMax(1, 100); DMinMax(1000000, 1000000000); ParseDate(YYYY-MM-dd)"/>
+                    <property name="cellProcessors"
+                        value= "ParseInt; NotNull, StrMinMax(1, 100); DMinMax(1000000, 1000000000); ParseDate('yyyy-MM-dd')"/>
                 </properties>
             </reader>
 
