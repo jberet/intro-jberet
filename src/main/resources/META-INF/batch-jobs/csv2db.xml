@@ -18,7 +18,7 @@
         <batchlet ref="jdbcBatchlet">
             <properties>
                 <property name="url"
-value="jdbc:postgresql://#{jobParameters['db.host']}?:127.0.0.1;/#{jobParameters['db.name']}?:sampledb;"/>
+value="jdbc:postgresql://#{jobParameters['db.host']}?:postgresql;/#{jobParameters['db.name']}?:sampledb;"/>
                 <property name="user" value="#{jobParameters['db.user']}?:jberet;"/>
                 <property name="password" value="#{jobParameters['db.password']}?:jberet;"/>
 
@@ -53,7 +53,7 @@ DELETE FROM MOVIES"/>
             <writer ref="jdbcItemWriter">
                 <properties>
                     <property name="url"
-                              value="jdbc:postgresql://#{jobParameters['db.host']}?:127.0.0.1;/#{jobParameters['db.name']}?:sampledb;"/>
+                              value="jdbc:postgresql://#{jobParameters['db.host']}?:postgresql;/#{jobParameters['db.name']}?:sampledb;"/>
                     <property name="user" value="#{jobParameters['db.user']}?:jberet;"/>
                     <property name="password" value="#{jobParameters['db.password']}?:jberet;"/>
 
