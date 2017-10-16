@@ -42,7 +42,7 @@ WildFly, and JBoss EAP.
  
  * `url`: connection URL to connect to Postgresql database server 
  
-    * the host part defaults to `127.0.0.1`
+    * the host part defaults to `postgresql`
     * the database name part defaults to `sampledb`
  * `user`: Postgresql db user name, defaults to `jberet`
  * `password`: Postgresql db user password, defaults to `jberet`
@@ -95,7 +95,7 @@ If db.host, db.name, db.user, or db.password is different from the defaults,
 then specify them as query params:
 
 ```
-curl -X POST -H 'Content-Type:application/json' 'http://localhost:8080/intro-jberet/api/jobs/csv2db/start?db.host=172.30.245.228'
+curl -X POST -H 'Content-Type:application/json' 'http://localhost:8080/intro-jberet/api/jobs/csv2db/start?db.host=localhost'
 ```
 
 Sample output from starting a job execution:
@@ -206,7 +206,7 @@ curl http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro
 }
 ```
 
-To restart the above failed job execution id `2`, with `db.host` query param:
+To restart the above failed job execution id `2`, with correct `db.host` query param:
 
 ```json
 curl -X POST -H 'Content-Type:application/json' 'http://intro-jberet-cfang-p1.1d35.starter-us-east-1.openshiftapps.com/intro-jberet/api/jobexecutions/2/restart?db.host=172.30.245.228'
@@ -352,13 +352,13 @@ To check the status of the schedule:
 ```
 select * from MOVIES;
 
- rank |                        tit                        |      grs      |    opn                                                                
-------+---------------------------------------------------+---------------+------------                                                           
-    1 | Marvel's The Avengers                             | 623357910.000 | 2012-01-01                                                            
-    2 | The Dark Knight Rises                             | 448139099.000 | 2012-01-01                                                            
-    3 | The Hunger Games                                  | 408010692.000 | 2012-01-01                                                            
-    4 | Skyfall                                           | 304360277.000 | 2012-01-01                                                            
-
+ rank |                        tit                        |      grs      |    opn
+------+---------------------------------------------------+---------------+------------
+    1 | Marvel's The Avengers                             | 623357910.000 | 2012-05-04
+    2 | The Dark Knight Rises                             | 448139099.000 | 2012-07-20
+    3 | The Hunger Games                                  | 408010692.000 | 2012-03-23
+    4 | Skyfall                                           | 304360277.000 | 2012-11-09
+    5 | The Hobbit: An Unexpected Journey                 | 303003568.000 | 2012-12-14
 ...
 ```
 
