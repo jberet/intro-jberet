@@ -2,7 +2,7 @@
 ## Overview
 
 This sample application demonstrates the basic Java batch processing in
-WildFly Java EE and OpenShift cloud environment. This application follows
+WildFly Jakarta EE and OpenShift cloud environment. This application follows
 the standard batch programming model as defined in 
 [JSR 352](https://jcp.org/en/jsr/detail?id=352) 
 (Batch Applications for the Java Platform). 
